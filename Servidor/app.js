@@ -1,11 +1,14 @@
-var express = require('express')
-var mysql = require('mysql')
-var app = express()
+const express = require('express')
+const mysql = require('mysql')
 const cors = require('cors')
+
+const app = express()
+
 app.use(express.json());
 app.use(cors())
+
 //Parametros de conexion
-var conexion = mysql.createConnection({
+const conexion = mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'',
@@ -17,7 +20,7 @@ conexion.connect(function(error){
     if(error){
         throw error;
     }else{
-        console.log("Conexion exitosa")
+        console.log("Conexion exitosa");
     }
 })
 
@@ -38,7 +41,7 @@ app.get('/api/articulos',(req, res)=>{
 app.get('/api/cliente',(req, res)=>{
     conexion.query('SELECT * FROM cliente', (error, filas)=>{
         if(error){
-            throw error;
+            res.sendStatus(501);
         }else{
             res.send(filas)
         }
@@ -137,7 +140,7 @@ app.put('/api/proveedor/:id',(req, res)=>{
     let nombre = req.body.nombre
     let rfc = req.body.rfc
     let direccion = req.body.direccion
-    let sql = "UPDATE proveedor SET nombre = ?, rfc = ?, direccion = ? , WHERE id = ?";
+    let sql = "UPDATE proveedor SET nombre = ?, rfc = ?, direccion = ? WHERE id = ?";
     conexion.query(sql,[nombre,rfc,direccion,id], function(error,results){
         if(error){
             throw error
